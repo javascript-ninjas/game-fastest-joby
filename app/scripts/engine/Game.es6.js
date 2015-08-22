@@ -5,11 +5,11 @@ let players = [];
 
 let displayScoreBoard = (game) => {
     let scoreText = players.map((player) => {
-        return player.name + ': ' + player.score ' points';
+        return player.name + ': ' + player.score + ' points';
     });
 
     // score board
-    game.add.text(Game.WIDTH / 2.4, Game.HEIGHT / 2.4, scoreText, { fontSize: '24px', fill: '#fff' });
+    game.add.text(Game.WIDTH / 2.5, Game.HEIGHT / 2.5, scoreText, { fontSize: '24px', fill: '#fff' });
 };
 
 let clearGame = () => {
@@ -21,10 +21,17 @@ let clearGame = () => {
     players = [];
 };
 
+let appendList = (game, positions, group, index) => {
+    positions.forEach((position) => {
+        let [x, y] = position;
+        group.add(game.add.tileSprite(32 * x, 32 * y, 32, 32, '2-32x32', index));
+    });
+    group.enableBody = true;
+};
+
 export class Game {
     constructor() {
         Loader.update(10);
-
     }
 
     setup() {
@@ -100,17 +107,24 @@ export class Game {
         let cursors;
         let car1;
 
-        let redDiamonds;
-        let redDiamondsPositions = [
+        let diamondsGroup;
+        let diamondsPositions = [
             [3, 1], [7, 4], [15, 5], [22, 8], [29, 1], [44, 1], [51, 8], [64, 5], [72, 2], [89, 6], [97, 8]
+        ];
+        let goldGroup;
+        let goldPositions = [
+            [4, 8], [20, 1], [45, 8], [57, 1], [77, 3], [99, 2]
         ];
 
         return {
             preload() {
                 console.clear();
 
-                redDiamonds = this.game.add.group();
-                this._appendRedDiamondList();
+                diamondsGroup = this.game.add.group();
+                goldGroup = this.game.add.group();
+
+                appendList(this.game, diamondsPositions, diamondsGroup, 54);
+                appendList(this.game, goldPositions, goldGroup, 59);
 
                 car1 = new Player('Car #1', this.game);
                 players.push(car1);
@@ -125,18 +139,11 @@ export class Game {
                 cursors = this.game.input.keyboard.createCursorKeys();
             },
 
-            _appendRedDiamondList() {
-                redDiamondsPositions.forEach((position) => {
-                    let [x, y] = position;
-                    redDiamonds.add(this.game.add.tileSprite(32 * x, 32 * y, 32, 32, '2-32x32', 54));
-                });
-                redDiamonds.enableBody = true;
-            },
-
             create() {
                 this.game.camera.follow(car1.getSprite());
                 this.game.physics.arcade.enable(car1.getSprite());
-                this.game.physics.arcade.enable(redDiamonds);
+                this.game.physics.arcade.enable(diamondsGroup);
+                this.game.physics.arcade.enable(goldGroup);
 
                 car1.updateBody();
                 car1.refreshScore();
@@ -147,10 +154,17 @@ export class Game {
                 car1.clearVelocity(cursors);
 
                 this.game.physics.arcade.collide(car1.getSprite(), worldLayer);
-                this.game.physics.arcade.collide(car1.getSprite(), redDiamonds, (car, item) => {
+                this.game.physics.arcade.collide(car1.getSprite(), diamondsGroup, (car, item) => {
+                    item.destroy();
+
                     car1.score += 10;
                     car1.refreshScore();
+                });
+                this.game.physics.arcade.collide(car1.getSprite(), goldGroup, (car, item) => {
                     item.destroy();
+
+                    car1.score += 50;
+                    car1.refreshScore();
                 });
 
                 if (this.game.world.width - car1.getSprite().x - car1.getSprite().width <= 0) {
