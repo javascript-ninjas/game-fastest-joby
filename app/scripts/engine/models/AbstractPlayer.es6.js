@@ -43,11 +43,4 @@ export class AbstractPlayer {
             this._sprite.body.x += 3.5;
         }
     }
-
-    clearVelocity(cursors) {
-        // Czyścimy prędkość
-        if (!cursors.up.isDown && !cursors.down.isDown && !cursors.left.isDown && !cursors.right.isDown) {
-            this._sprite.body.velocity.x = 0;
-        }
-    }
 }

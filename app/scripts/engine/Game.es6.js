@@ -43,7 +43,6 @@ export class Game {
     setup() {
         Loader.update(20);
         let game = new Phaser.Game(Game.WIDTH, Game.HEIGHT, Phaser.AUTO, 'canvas');
-        game.stage.backgroundColor = 0x000000;
 
         game.state.add('Boot', this.stateBoot);
         game.state.add('Preload', this.statePreload);
@@ -177,7 +176,6 @@ export class Game {
                 let cursors = player.getControl();
 
                 player.supportCarMove(cursors);
-                player.clearVelocity(cursors);
 
                 this.game.physics.arcade.collide(player.getSprite(), worldLayer);
                 this.game.physics.arcade.collide(player.getSprite(), diamondsGroup, (car, item) => {
