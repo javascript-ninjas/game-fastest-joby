@@ -1,15 +1,21 @@
 import {Loader} from './Loader';
-import {Player} from './Player';
+import {Player} from './models/Player';
+import {Enemy} from './models/Enemy';
 
 let players = [];
 
 let displayScoreBoard = (game) => {
-    let scoreText = players.map((player) => {
-        return player.name + ': ' + player.score + ' points';
+    // Sortujemy po liczbie punktów, aby zwycięzca był pierwszy.
+    players = players.sort(function (player) {
+        return player.score;
     });
 
-    // score board
-    game.add.text(Game.WIDTH - 300, 40, scoreText, { fontSize: '24px', fill: '#fff' });
+    let scoreText = players.map((player) => {
+        return `${player.name}: ${player.score} points`;
+    });
+
+    // Score Board
+    game.add.text(Game.WIDTH - 300, 40, scoreText.join("\n"), { fontSize: '24px', fill: '#fff' });
 };
 
 let clearGame = () => {
@@ -104,8 +110,8 @@ export class Game {
         // Sama gra.
         let map;
         let worldLayer;
-        let cursors;
         let car1;
+        let car2;
 
         let diamondsGroup;
         let diamondsPositions = [
@@ -132,60 +138,68 @@ export class Game {
                 appendList(this.game, goldPositions, goldGroup, 171);
                 appendList(this.game, bombsPositions, bombsGroup, 28);
 
-                car1 = new Player('Car #1', this.game);
-                players.push(car1);
-
                 map = this.game.add.tilemap('map-1');
                 map.addTilesetImage('2-32x32');
                 map.setCollisionBetween(1, 256);
 
                 worldLayer = map.createLayer('Tile Layer 1');
                 worldLayer.resizeWorld();
-
-                cursors = this.game.input.keyboard.createCursorKeys();
             },
 
             create() {
-                this.game.camera.follow(car1.getSprite());
-                this.game.physics.arcade.enable(car1.getSprite());
                 this.game.physics.arcade.enable(diamondsGroup);
                 this.game.physics.arcade.enable(goldGroup);
                 this.game.physics.arcade.enable(bombsGroup);
 
+                car1 = new Player(this.game);
+                players.push(car1);
+
+                car2 = new Enemy(this.game);
+                players.push(car2);
+
+                this.game.camera.follow(car1.getSprite());
+                this.game.physics.arcade.enable(car1.getSprite());
                 car1.updateBody();
                 car1.refreshScore();
+
+                this.game.camera.follow(car2.getSprite());
+                this.game.physics.arcade.enable(car2.getSprite());
+                car2.updateBody();
+                car2.refreshScore();
             },
 
-            update() {
-                car1.supportCarMove(cursors);
-                car1.clearVelocity(cursors);
+            applyRules(player) {
+                let cursors = player.getControl();
 
-                this.game.physics.arcade.collide(car1.getSprite(), worldLayer);
-                this.game.physics.arcade.collide(car1.getSprite(), diamondsGroup, (car, item) => {
+                player.supportCarMove(cursors);
+                player.clearVelocity(cursors);
+
+                this.game.physics.arcade.collide(player.getSprite(), worldLayer);
+                this.game.physics.arcade.collide(player.getSprite(), diamondsGroup, (car, item) => {
                     item.destroy();
 
-                    car1.score += 10;
-                    car1.refreshScore();
+                    player.score += 10;
+                    player.refreshScore();
                 });
-                this.game.physics.arcade.collide(car1.getSprite(), goldGroup, (car, item) => {
+                this.game.physics.arcade.collide(player.getSprite(), goldGroup, (car, item) => {
                     item.destroy();
 
-                    car1.score += 50;
-                    car1.refreshScore();
+                    player.score += 50;
+                    player.refreshScore();
                 });
-                this.game.physics.arcade.collide(car1.getSprite(), bombsGroup, (car, item) => {
+                this.game.physics.arcade.collide(player.getSprite(), bombsGroup, (car, item) => {
                     item.destroy();
                     this.game.state.start('GameOver');
                 });
 
-                if (this.game.world.width - car1.getSprite().x - car1.getSprite().width <= 0) {
+                if (this.game.world.width - player.getSprite().x - player.getSprite().width <= 0) {
                     this.game.state.start('Winner');
                 }
             },
 
-            render() {
-                // this.game.debug.spriteInfo(car1, 10, 50);
-                // this.game.debug.body(car1);
+            update() {
+                this.applyRules(car1);
+                this.applyRules(car2);
             }
         }
     }

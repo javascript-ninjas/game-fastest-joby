@@ -1,33 +1,28 @@
-export class Player {
-    constructor(name, game) {
+export class AbstractPlayer {
+    constructor(game) {
         this.score = 0;
-        this.name = name;
         this.game = game;
-
-        this._setupSprite();
-
-        console.info('new Player(%s)', name);
     }
-    
+
     getSprite() {
         return this._sprite;
     }
 
     _setupSprite() {
-        this._sprite = this.game.add.sprite(0, 160, 'car-1');
+        this._sprite = this.game.add.sprite(0, 160, this.spriteName);
     }
-    
+
     updateBody() {
         this._sprite.body.collideWorldBounds = true;
         this._sprite.body.setSize(32, 22, 0, 5);
 
-        this._scoreText = this.game.add.text(20, 5, '', { fontSize: '16px', fill: '#fff' });
+        this._scoreText = this.game.add.text(...this.scorePosition, '', { fontSize: '16px', fill: '#fff' });
         this._scoreText.fixedToCamera = true;
         this._scoreText.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
     }
 
     refreshScore() {
-        this._scoreText.setText('Score: ' + this.score + ' points');
+        this._scoreText.setText(`${this.name} score: ${this.score} points`);
     }
 
     supportCarMove(cursors) {
