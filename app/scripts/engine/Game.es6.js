@@ -83,6 +83,8 @@ export class Game {
         let worldLayer;
         let cursors;
         let car1;
+        let score = 0;
+        let scoreText;
 
         let redDiamonds;
         let redDiamondsPositions = [
@@ -121,6 +123,15 @@ export class Game {
 
                 car1.body.collideWorldBounds = true;
                 car1.body.setSize(32, 22, 0, 5);
+
+                scoreText = this.game.add.text(20, 5, '', { fontSize: '16px', fill: '#fff' });
+                scoreText.fixedToCamera = true;
+                scoreText.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
+                this._printScore();
+            },
+            
+            _printScore() {
+                scoreText.setText('Score: ' + score + ' points');
             },
 
             update() {
@@ -128,7 +139,9 @@ export class Game {
                 this._clearVelocity();
 
                 this.game.physics.arcade.collide(car1, worldLayer);
-                this.game.physics.arcade.collide(car1, redDiamonds, function (car, item) {
+                this.game.physics.arcade.collide(car1, redDiamonds, (car, item) => {
+                    score += 10;
+                    this._printScore();
                     item.destroy();
                 });
 
@@ -164,8 +177,8 @@ export class Game {
             },
 
             render() {
-                this.game.debug.spriteInfo(car1, 10, 50);
-                this.game.debug.body(car1);
+                // this.game.debug.spriteInfo(car1, 10, 50);
+                // this.game.debug.body(car1);
             }
         }
     }
