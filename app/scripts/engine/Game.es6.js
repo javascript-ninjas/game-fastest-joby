@@ -3,6 +3,24 @@ import {Player} from './Player';
 
 let players = [];
 
+let displayScoreBoard = (game) => {
+    let scoreText = players.map((player) => {
+        return player.name + ': ' + player.score ' points';
+    });
+
+    // score board
+    game.add.text(Game.WIDTH / 2.4, Game.HEIGHT / 2.4, scoreText, { fontSize: '24px', fill: '#fff' });
+};
+
+let clearGame = () => {
+    players.forEach((player, index) => {
+        player.getSprite().destroy();
+        delete players[index];
+    });
+
+    players = [];
+};
+
 export class Game {
     constructor() {
         Loader.update(10);
@@ -89,6 +107,8 @@ export class Game {
 
         return {
             preload() {
+                console.clear();
+
                 redDiamonds = this.game.add.group();
                 this._appendRedDiamondList();
 
@@ -153,6 +173,9 @@ export class Game {
 
                 let retryButton = this.game.add.button(Game.WIDTH / 2, Game.HEIGHT / 1.3, 'button-retry', this.retryTheGame, this);
                 retryButton.anchor.setTo(0.5, 0.5);
+
+                displayScoreBoard(this.game);
+                clearGame();
             },
 
             retryTheGame() {
@@ -170,16 +193,8 @@ export class Game {
                 let oneMoreTimeButton = this.game.add.button(Game.WIDTH / 2, Game.HEIGHT / 1.3, 'button-retry', this.oneMoreTimeTheGame, this);
                 oneMoreTimeButton.anchor.setTo(0.5, 0.5);
 
-                this._displayScoreBoard();
-            },
-
-            _displayScoreBoard() {
-                let scoreText = players.map((player) => {
-                    return player.name + ': ' + player.score;
-                });
-
-                // score board
-                this.game.add.text(Game.WIDTH / 2.4, Game.HEIGHT / 2.4, scoreText, { fontSize: '24px', fill: '#fff' });
+                displayScoreBoard(this.game);
+                clearGame();
             },
 
             oneMoreTimeTheGame() {

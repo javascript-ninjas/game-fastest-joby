@@ -33,19 +33,19 @@ export class Player {
     supportCarMove(cursors) {
         // Każdy w oddzielnym warunku, bo dajemy możliwość przytrzymania dwóch klawiszy na raz.
         if (cursors.up.isDown) {
-            this._sprite.body.y -= 1.5;
+            this._sprite.body.y -= 2.5;
         }
 
         if (cursors.down.isDown) {
-            this._sprite.body.y += 1.5;
+            this._sprite.body.y += 2.5;
         }
 
         if (cursors.left.isDown) {
-            this._sprite.body.x -= 2.5;
+            this._sprite.body.x -= 3.5;
         }
 
         if (cursors.right.isDown) {
-            this._sprite.body.x += 2.5;
+            this._sprite.body.x += 3.5;
         }
     }
 
