@@ -9,7 +9,7 @@ let displayScoreBoard = (game) => {
     });
 
     // score board
-    game.add.text(Game.WIDTH / 2.5, Game.HEIGHT / 2.5, scoreText, { fontSize: '24px', fill: '#fff' });
+    game.add.text(Game.WIDTH - 300, 40, scoreText, { fontSize: '24px', fill: '#fff' });
 };
 
 let clearGame = () => {
@@ -115,6 +115,10 @@ export class Game {
         let goldPositions = [
             [4, 8], [20, 1], [45, 8], [57, 1], [77, 3], [99, 2]
         ];
+        let bombsGroup;
+        let bombsPositions = [
+            [8, 8], [21, 4], [56, 8]
+        ];
 
         return {
             preload() {
@@ -122,9 +126,11 @@ export class Game {
 
                 diamondsGroup = this.game.add.group();
                 goldGroup = this.game.add.group();
+                bombsGroup = this.game.add.group();
 
-                appendList(this.game, diamondsPositions, diamondsGroup, 54);
-                appendList(this.game, goldPositions, goldGroup, 59);
+                appendList(this.game, diamondsPositions, diamondsGroup, 79);
+                appendList(this.game, goldPositions, goldGroup, 171);
+                appendList(this.game, bombsPositions, bombsGroup, 28);
 
                 car1 = new Player('Car #1', this.game);
                 players.push(car1);
@@ -144,6 +150,7 @@ export class Game {
                 this.game.physics.arcade.enable(car1.getSprite());
                 this.game.physics.arcade.enable(diamondsGroup);
                 this.game.physics.arcade.enable(goldGroup);
+                this.game.physics.arcade.enable(bombsGroup);
 
                 car1.updateBody();
                 car1.refreshScore();
@@ -165,6 +172,10 @@ export class Game {
 
                     car1.score += 50;
                     car1.refreshScore();
+                });
+                this.game.physics.arcade.collide(car1.getSprite(), bombsGroup, (car, item) => {
+                    item.destroy();
+                    this.game.state.start('GameOver');
                 });
 
                 if (this.game.world.width - car1.getSprite().x - car1.getSprite().width <= 0) {
