@@ -10,8 +10,8 @@ let displayScoreBoard = (game) => {
         return player.score;
     });
 
-    let scoreText = players.map((player) => {
-        return `${player.name}: ${player.score} points`;
+    let scoreText = players.map((player, index) => {
+        return `${index + 1}. ${player.name}: ${player.score} points`;
     });
 
     // Score Board
