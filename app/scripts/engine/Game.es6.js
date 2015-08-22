@@ -24,17 +24,22 @@ export class Game {
     stateBoot() {
         return {
             preload() {
+                this.game.load.spritesheet('2-32x32', 'assets/spritesheets/2-32x32.png', 32, 32);
+
                 Loader.update(40);
-                this.game.load.spritesheet('car-1', 'images/sprites/car-1.png', 66, 66);
-                this.game.load.spritesheet('car-2', 'images/sprites/car-2.png', 76, 76);
+                this.game.load.image('car-1', 'assets/sprites/car-1.png', 32, 32);
+                this.game.load.image('car-2', 'assets/sprites/car-2.png', 32, 32);
                 Loader.update(50);
 
-                this.game.load.image('game-title', 'images/backgrounds/game-title.png');
-                this.game.load.image('game-over', 'images/backgrounds/game-over.png');
+                this.game.load.image('game-title', 'assets/images/backgrounds/game-title.png');
+                this.game.load.image('game-over', 'assets/images/backgrounds/game-over.png');
                 Loader.update(60);
 
-                this.game.load.image('button-play', 'images/buttons/button-play.png');
-                this.game.load.image('button-retry', 'images/buttons/button-retry.png');
+                this.game.load.tilemap('map-1', 'assets/tilemaps/map-1.json', null, Phaser.Tilemap.TILED_JSON);
+                Loader.update(70);
+
+                this.game.load.image('button-play', 'assets/images/buttons/button-play.png');
+                this.game.load.image('button-retry', 'assets/images/buttons/button-retry.png');
                 Loader.update(80);
             },
 
@@ -83,6 +88,14 @@ export class Game {
                 car1.body.collideWorldBounds = true;
 
                 cursors = this.game.input.keyboard.createCursorKeys();
+
+                let map = this.game.add.tilemap('map-1');
+                map.addTilesetImage('2-32x32');
+
+                map.setCollisionByExclusion([]);
+
+                let world = map.createLayer('Tile Layer 1');
+                world.resizeWorld();
             },
 
             create() {
@@ -98,7 +111,7 @@ export class Game {
             /**
              * Każdy w oddzielnym warunku - czyli dajemy możliwość przytrzymania dwóch klawiszy na raz.
              */
-            _supportCarMove() {
+                _supportCarMove() {
                 if (cursors.up.isDown) {
                     car1.body.y -= 1.5;
                 }
@@ -143,4 +156,4 @@ export class Game {
 }
 
 Game.WIDTH = 800;
-Game.HEIGHT = 300;
+Game.HEIGHT = 320;
