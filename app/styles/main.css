@@ -2,4 +2,24 @@
     width: 800px;
     height: 300px;
     background: #000;
+    position: relative;
+}
+
+#loader {
+    width: 150px;
+    height: 50px;
+    background: url("../images/loader/background.png");
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+#loader > #loader-progress {
+    margin: 10px 0 0 10px;
+    width: 0;
+    height: 30px;
+    background: url("../images/loader/bar.png");
 }

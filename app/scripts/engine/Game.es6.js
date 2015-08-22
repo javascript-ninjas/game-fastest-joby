@@ -1,6 +1,13 @@
+import {Loader} from './Loader';
+
 export class Game {
+    constructor() {
+        Loader.update(10);
+    }
+
     setup() {
-        let game = new Phaser.Game(Game.WIDTH, Game.HEIGHT, Phaser.AUTO, 'app');
+        Loader.update(20);
+        let game = new Phaser.Game(Game.WIDTH, Game.HEIGHT, Phaser.AUTO, 'game');
 
         game.state.add('Boot', this.stateBoot);
         game.state.add('Preload', this.statePreload);
@@ -8,6 +15,7 @@ export class Game {
         game.state.add('GameOver', this.stateGameOver);
 
         game.state.start('Boot');
+        Loader.update(30);
     }
 
     /**
@@ -16,13 +24,18 @@ export class Game {
     stateBoot() {
         return {
             preload() {
+                Loader.update(40);
                 this.game.load.spritesheet('car-1', 'images/sprites/car-1.png', 66, 66);
                 this.game.load.spritesheet('car-2', 'images/sprites/car-2.png', 76, 76);
+                Loader.update(50);
 
                 this.game.load.image('game-title', 'images/backgrounds/game-title.png');
                 this.game.load.image('game-over', 'images/backgrounds/game-over.png');
+                Loader.update(60);
+
                 this.game.load.image('button-play', 'images/buttons/button-play.png');
                 this.game.load.image('button-retry', 'images/buttons/button-retry.png');
+                Loader.update(80);
             },
 
             create() {
@@ -39,10 +52,14 @@ export class Game {
     statePreload() {
         return {
             preload() {
+                Loader.update(90);
                 this.game.add.sprite(0, 0, 'game-title');
 
                 let playButton = this.game.add.button(Game.WIDTH / 2, Game.HEIGHT / 1.3, 'button-play', this.playTheGame, this);
                 playButton.anchor.setTo(0.5, 0.5);
+
+                Loader.update(100);
+                Loader.hide();
             },
 
             playTheGame() {
