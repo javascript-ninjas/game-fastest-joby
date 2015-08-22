@@ -1,8 +1,12 @@
 #app {
+    width: 830px;
+}
+
+#game {
     width: 800px;
     height: 320px;
-    background: #000;
     position: relative;
+    margin: 0 auto;
 }
 
 #loader {

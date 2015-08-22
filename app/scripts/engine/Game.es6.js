@@ -42,7 +42,8 @@ export class Game {
 
     setup() {
         Loader.update(20);
-        let game = new Phaser.Game(Game.WIDTH, Game.HEIGHT, Phaser.AUTO, 'game');
+        let game = new Phaser.Game(Game.WIDTH, Game.HEIGHT, Phaser.AUTO, 'canvas');
+        game.stage.backgroundColor = 0x000000;
 
         game.state.add('Boot', this.stateBoot);
         game.state.add('Preload', this.statePreload);
@@ -151,16 +152,20 @@ export class Game {
                 this.game.physics.arcade.enable(goldGroup);
                 this.game.physics.arcade.enable(bombsGroup);
 
+                // ---
+
                 car1 = new Player(this.game);
                 players.push(car1);
-
-                car2 = new Enemy(this.game);
-                players.push(car2);
 
                 this.game.camera.follow(car1.getSprite());
                 this.game.physics.arcade.enable(car1.getSprite());
                 car1.updateBody();
                 car1.refreshScore();
+
+                // ---
+
+                car2 = new Enemy(this.game);
+                players.push(car2);
 
                 this.game.camera.follow(car2.getSprite());
                 this.game.physics.arcade.enable(car2.getSprite());
