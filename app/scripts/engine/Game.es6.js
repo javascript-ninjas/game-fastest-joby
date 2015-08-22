@@ -13,6 +13,7 @@ export class Game {
         game.state.add('Preload', this.statePreload);
         game.state.add('TheGame', this.stateTheGame);
         game.state.add('GameOver', this.stateGameOver);
+        game.state.add('Winner', this.stateWinner);
 
         game.state.start('Boot');
         Loader.update(30);
@@ -33,6 +34,7 @@ export class Game {
 
                 this.game.load.image('game-title', 'assets/images/backgrounds/game-title.png');
                 this.game.load.image('game-over', 'assets/images/backgrounds/game-over.png');
+                this.game.load.image('game-winner', 'assets/images/backgrounds/game-winner.png');
                 Loader.update(60);
 
                 this.game.load.tilemap('map-1', 'assets/tilemaps/map-1.json', null, Phaser.Tilemap.TILED_JSON);
@@ -77,71 +79,66 @@ export class Game {
      * Sama gra.
      */
     stateTheGame() {
+        let map;
         let worldLayer;
         let cursors;
         let car1;
 
+        let redDiamonds;
+        let redDiamondsPositions = [
+            [3, 1], [7, 4], [15, 5], [22, 8], [29, 1], [44, 1], [51, 8], [64, 5], [72, 2], [89, 6], [97, 8]
+        ];
+
         return {
             preload() {
-                car1 = this.game.add.sprite(0, Game.HEIGHT / 2, 'car-1', 8);
-                // car1.anchor.setTo(0.5, 0.5);
+                redDiamonds = this.game.add.group();
+                this._appendRedDiamondList();
 
-                cursors = this.game.input.keyboard.createCursorKeys();
+                car1 = this.game.add.sprite(0, Game.HEIGHT / 2, 'car-1');
 
-                let map = this.game.add.tilemap('map-1');
+                map = this.game.add.tilemap('map-1');
                 map.addTilesetImage('2-32x32');
-
                 map.setCollisionBetween(1, 256);
-
-                map.setTileIndexCallback(29, this._collisionWithBomb, this);
-                map.setTileIndexCallback(54, this._collisionWithRedDiamond, this);
-                map.setTileIndexCallback(60, this._collisionWithYellowDiamond, this);
-                map.setTileIndexCallback(80, this._collisionWithPurpleRock, this);
 
                 worldLayer = map.createLayer('Tile Layer 1');
                 worldLayer.resizeWorld();
+
+                cursors = this.game.input.keyboard.createCursorKeys();
             },
 
-            _collisionWithBomb(car1, item) {
-                item.alpha = 0.2;
-                worldLayer.dirty = true;
-            },
-
-            _collisionWithRedDiamond(car, item) {
-                item.alpha = 0.2;
-                worldLayer.dirty = true;
-            },
-
-            _collisionWithYellowDiamond(car, item) {
-                item.alpha = 0.2;
-                worldLayer.dirty = true;
-            },
-
-            _collisionWithPurpleRock(car, item) {
-                item.alpha = 0.2;
-                worldLayer.dirty = true;
+            _appendRedDiamondList() {
+                redDiamondsPositions.forEach((position) => {
+                    let [x, y] = position;
+                    redDiamonds.add(this.game.add.tileSprite(32 * x, 32 * y, 32, 32, '2-32x32', 54));
+                });
+                redDiamonds.enableBody = true;
             },
 
             create() {
                 this.game.camera.follow(car1);
                 this.game.physics.arcade.enable(car1);
+                this.game.physics.arcade.enable(redDiamonds);
 
                 car1.body.collideWorldBounds = true;
+                car1.body.setSize(32, 22, 0, 5);
             },
 
             update() {
                 this._supportCarMove();
+                this._clearVelocity();
 
                 this.game.physics.arcade.collide(car1, worldLayer);
+                this.game.physics.arcade.collide(car1, redDiamonds, function (car, item) {
+                    item.destroy();
+                });
 
                 if (this.game.world.width - car1.x - car1.width <= 0) {
-                    this.game.state.start('GameOver');
+                    this.game.state.start('Winner');
                 }
             },
 
             _supportCarMove() {
                 // Każdy w oddzielnym warunku, bo dajemy możliwość przytrzymania dwóch klawiszy na raz.
-
                 if (cursors.up.isDown) {
                     car1.body.y -= 1.5;
                 }
@@ -159,9 +156,16 @@ export class Game {
                 }
             },
 
+            _clearVelocity() {
+                // Czyścimy prędkość
+                if (!cursors.up.isDown && !cursors.down.isDown && !cursors.left.isDown && !cursors.right.isDown) {
+                    car1.body.velocity.x = 0;
+                }
+            },
+
             render() {
-                // this.game.debug.spriteInfo(car1, 32, 32);
-                // this.game.debug.body(car1);
+                this.game.debug.spriteInfo(car1, 10, 50);
+                this.game.debug.body(car1);
             }
         }
     }
@@ -179,6 +183,24 @@ export class Game {
             },
 
             retryTheGame() {
+                this.game.state.start('TheGame');
+            }
+        }
+    }
+
+    /**
+     * Zwycięstwo
+     */
+    stateWinner() {
+        return {
+            preload() {
+                this.game.add.sprite(0, 0, 'game-winner');
+
+                let oneMoreTimeButton = this.game.add.button(Game.WIDTH / 2, Game.HEIGHT / 1.3, 'button-retry', this.oneMoreTimeTheGame, this);
+                oneMoreTimeButton.anchor.setTo(0.5, 0.5);
+            },
+
+            oneMoreTimeTheGame() {
                 this.game.state.start('TheGame');
             }
         }
