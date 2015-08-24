@@ -6,8 +6,14 @@ let players = [];
 
 let displayScoreBoard = (game) => {
     // Sortujemy po liczbie punktów, aby zwycięzca był pierwszy.
-    players = players.sort(function (player) {
-        return player.score;
+    players = players.sort(function (player1, player2) {
+        if (player1.score < player2.score) {
+            return 1;
+        } else if (player1.score > player2.score) {
+            return -1;
+        } else {
+            return 0;
+        }
     });
 
     let scoreText = players.map((player, index) => {
