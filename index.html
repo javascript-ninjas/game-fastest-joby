@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>game-fastest-joby</title>
+    <link rel="stylesheet" href="styles/bootstrap.css"/>
+    <link rel="stylesheet" href="styles/main.css"/>
+</head>
+<body>
+    <div id="app" class="container">
+        <div class="jumbotron">
+            <h1>Fastest Joby</h1>
+            <p>
+                Gra stworzona podczas hackathonu grupy <code>JavaScript Ninjas</code>.<br />
+                Dzień stworzenia: <code>22 sierpnia 2015 roku</code>.
+            </p>
+            <!--<p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>-->
+        </div>
+
+        <div id="game">
+            <div id="canvas"></div>
+            <div id="loader">
+                <div id="loader-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/vendor/phaser.js"></script>
+    <script src="dist/main.js"></script>
+</body>
+</html>
