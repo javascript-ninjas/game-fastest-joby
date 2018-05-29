@@ -3,8 +3,8 @@ import { Game } from './engine/game';
 class Main {
     constructor() {
         this.game = new Game();
+        this.game.setup();
     }
 }
 
-const m = new Main();
-m.game.setup();
+new Main();
