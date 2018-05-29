@@ -1,4 +1,4 @@
-import {AbstractPlayer} from './AbstractPlayer';
+import { AbstractPlayer } from './abstract-player';
 
 export class Enemy extends AbstractPlayer {
     constructor(game) {

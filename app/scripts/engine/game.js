@@ -1,6 +1,6 @@
-import {Loader} from './Loader';
-import {Player} from './models/Player';
-import {Enemy} from './models/Enemy';
+import { Loader } from './loader';
+import { Player } from './models/player';
+import { Enemy } from './models/enemy';
 
 let players = [];
 
@@ -21,7 +21,10 @@ let displayScoreBoard = (game) => {
     });
 
     // Score Board
-    game.add.text(Game.WIDTH - 300, 40, scoreText.join("\n"), { fontSize: '24px', fill: '#fff' });
+    game.add.text(Game.WIDTH - 300, 40, scoreText.join('\n'), {
+        fontSize: '24px',
+        fill: '#fff'
+    });
 };
 
 let clearGame = () => {
@@ -89,7 +92,7 @@ export class Game {
                     this.game.state.start('Preload');
                 }, 1000);
             }
-        }
+        };
     }
 
     statePreload() {
@@ -109,7 +112,7 @@ export class Game {
             playTheGame() {
                 this.game.state.start('TheGame');
             }
-        }
+        };
     }
 
     stateTheGame() {
@@ -210,7 +213,7 @@ export class Game {
                 this.applyRules(car1);
                 this.applyRules(car2);
             }
-        }
+        };
     }
 
     stateGameOver() {
@@ -229,7 +232,7 @@ export class Game {
             retryTheGame() {
                 this.game.state.start('TheGame');
             }
-        }
+        };
     }
 
     stateWinner() {
@@ -248,7 +251,7 @@ export class Game {
             oneMoreTimeTheGame() {
                 this.game.state.start('TheGame');
             }
-        }
+        };
     }
 }
 

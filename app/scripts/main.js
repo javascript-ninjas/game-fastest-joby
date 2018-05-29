@@ -1,4 +1,4 @@
-import {Game} from './engine/Game';
+import { Game } from './engine/game';
 
 class Main {
     constructor() {
@@ -6,5 +6,5 @@ class Main {
     }
 }
 
-let m = new Main();
+const m = new Main();
 m.game.setup();
