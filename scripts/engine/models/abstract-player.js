@@ -2,6 +2,10 @@ export class AbstractPlayer {
     constructor(game) {
         this.score = 0;
         this.game = game;
+
+        this.name = null;
+        this.spriteName = null;
+        this.scorePosition = null;
     }
 
     getSprite() {
@@ -16,7 +20,10 @@ export class AbstractPlayer {
         this._sprite.body.collideWorldBounds = true;
         this._sprite.body.setSize(32, 22, 0, 5);
 
-        this._scoreText = this.game.add.text(...this.scorePosition, '', { fontSize: '16px', fill: '#fff' });
+        this._scoreText = this.game.add.text(...this.scorePosition, '', {
+            fontSize: '16px',
+            fill: '#fff'
+        });
         this._scoreText.fixedToCamera = true;
         this._scoreText.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
     }
