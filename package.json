@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "clear:all": "rm -rf node_modules/ npm-debug.log",
     "build": "webpack --profile -p",
     "deploy": "gh-pages -d app/"
   },
