@@ -1,11 +1,11 @@
 # game-fastest-joby
 
-> Project was created for hackathon of `@javascript-ninjas` in 22 august 2015.
+> Project was created during hackathon by `@javascript-ninjas` in 2015-08-22.
 
-## Overview
-
-What I was read during event:
+## Sources
 
  - http://okonet.ru/viennajs-webpack-introduction/
- - a lot of stuff about Phaser.io
 
+## License
+
+[The MIT License](http://piecioshka.mit-license.org) @ 2015

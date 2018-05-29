@@ -1,19 +1,15 @@
 module.exports = {
-    resolve: {
-        extensions: ['.es6.js', '.js', '']
-    },
-
-    entry: './app/scripts/main.es6.js',
+    entry: './app/scripts/main.js',
 
     output: {
         filename: 'app/dist/main.js'
     },
 
     module: {
-        loaders: [
+        rules: [
             {
-                test: /\.es6.js$/,
-                exclude: /node_modules/,
+                test: /\.js$/,
+                exclude: /(node_modules|vendors)/,
                 loader: 'babel-loader'
             }
         ]

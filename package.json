@@ -2,12 +2,13 @@
   "private": true,
   "scripts": {
     "clear:all": "rm -rf node_modules/ npm-debug.log",
-    "build": "webpack --profile -p",
+    "build": "webpack -p",
     "deploy": "gh-pages -d app/"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4"
+    "babel-loader": "^7.1.4",
+    "webpack-cli": "^2.1.4"
   },
   "dependencies": {
     "gh-pages": "^1.1.0",
