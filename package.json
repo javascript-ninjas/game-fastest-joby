@@ -6,12 +6,11 @@
         "deploy": "gh-pages -d app/"
     },
     "devDependencies": {
-        "babel-core": "^6.26.3",
-        "babel-loader": "^7.1.4",
-        "webpack-cli": "^2.1.4"
-    },
-    "dependencies": {
-        "gh-pages": "^1.1.0",
-        "webpack": "^4.10.0"
+        "@babel/core": "^7.3.4",
+        "babel-loader": "^8.0.5",
+        "cross-env": "^5.2.0",
+        "gh-pages": "^2.0.1",
+        "webpack": "^4.29.6",
+        "webpack-cli": "^3.2.3"
     }
 }

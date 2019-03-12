@@ -1,10 +1,6 @@
 # game-fastest-joby
 
-> Project was created during hackathon by `@javascript-ninjas` in 2015-08-22.
-
-## Sources
-
- - http://okonet.ru/viennajs-webpack-introduction/
+:video_game: The project was created during the hackathon by `@javascript-ninjas` in 2015-08-22.
 
 ## License
 
